@@ -69,4 +69,45 @@ Click the login button and you will see it enter into the administrator page
 UNION-based SQL injection assaults enable the analyzer to extract data from the database effectively. Since the “UNION” operator must be utilized if the two inquiries have precisely the same structure, the attacker must craft a “SELECT” statement like the first inquiry. we will be using the “User Info” page from Mutillidae to perform a Union-Based SQL injection attack. Go to “OWASP Top 10/A1 — Injection/SQLi — Extract-Data/User Info”
 
 After logging out, Now choose the menu as shown below:
+## OUTPUT:
+<img width="1920" height="1043" alt="8" src="https://github.com/user-attachments/assets/b428e9de-1d1d-4470-852b-a05a93ff941e" />
+<img width="1920" height="1043" alt="9" src="https://github.com/user-attachments/assets/46b07fe1-d7f2-4165-9918-0191f1f39087" />
+<img width="1920" height="1043" alt="10" src="https://github.com/user-attachments/assets/920bbd44-2992-4ee0-b6f7-b9d91b8b5500" />
+<img width="1920" height="1043" alt="11" src="https://github.com/user-attachments/assets/f9838647-720c-466f-ad29-53b530508ef0" />
+
+From this point, all our attack vectors will be performed in the URL section of the page using the Union-Based technique.There are two different ways to discover how many columns are selected by the original query. The first is to infuse an “ORDER BY” statement indicating a column number. Given the column number specified is higher than the number of columns in the “SELECT” statement, an error will be returned.
+
+## OUTPUT:
+<img width="1920" height="1043" alt="13" src="https://github.com/user-attachments/assets/332b5b38-3496-43ba-a421-f52351c37261" />
+
+Since we do not know the number of columns, we start at 1. To find the exact amount of columns, the number is incremented until an error related to the “ORDER BY” clause is returned. In this example, we incremented it to 6 and received an error message, so it means that the number of columns is lower than 6.
+
+The browser url of this info page need to be modified with the url as below:
+http://192.168.56.103/mutillidae/index.php?page=user-info.php&username=vijay%27%23&password=&user-info-php-submit-button=View+Account+Details
+## OUTPUT:
+<img width="1920" height="194" alt="14" src="https://github.com/user-attachments/assets/e6af2814-c1f3-40f1-a8e0-a5809d908d91" />
+
+After adding the order by 6 into the existing url , the following error statement will be obtained:
+## OUTPUT:
+<img width="1920" height="1043" alt="12" src="https://github.com/user-attachments/assets/98565470-e32f-451f-b900-6f5cb88fbf4a" />
+
+When we ordered by 5, it worked and displayed some information. It means there are five columns that we can work with. Following screenshot shows that the url modified to have statement added with ordered by 5 replacing 6.
+## OUTPUT:
+<img width="1920" height="1043" alt="15" src="https://github.com/user-attachments/assets/5c63b61e-41bb-40d3-b97a-6fd2c7575cdb" />
+
+ As it is having 5 columns the query worked fine and it provides the correct result
+## OUTPUT:
+![{5F441A13-6A10-4749-8CBA-4F8B2D54B171}](https://github.com/user-attachments/assets/1afd28d7-ba53-46a0-8f5d-fcb92345ea64)
+
+Instead of using the "order by" option, let’s use the "union select" option and provide all five columns. Ex: (union select 1,2,3,4,5).
+## OUTPUT:
+<img width="1920" height="317" alt="17" src="https://github.com/user-attachments/assets/ecc3e4fa-f6b3-46c9-bcae-d5a10883ed2e" />
+
+As given in the screenshot below columns 2,3,4 are usable in which we can substitute any sql commands to extract necessary information.
+## OUTPUT:
+<img width="1920" height="1043" alt="16" src="https://github.com/user-attachments/assets/8740c50b-ef49-45da-ac41-3ac7219b2f21" />
+
+Now we will substitute some few commands like database(), user(), version() to obtain the information regarding the database name, username and version of the database.
+http://192.168.56.103/mutillidae/index.php?page=user-info.php&username=vijay%27union%20select%201,database(),user(),version(),5%23&password=&user-info-php-submit-button=View+Account+Details
+## OUTPUT:
 The SQL Injection vulnerability is successfully exploited using the Multidae web application in Metasploitable2.
